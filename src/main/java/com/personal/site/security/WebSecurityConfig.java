@@ -65,19 +65,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/**").permitAll()
+//                .authorizeRequests().antMatchers("/**").permitAll()
 //                .anyRequest().authenticated();
-//        .authorizeRequests().antMatchers("/", "/auth/**", "/counters/**").permitAll()
-                .antMatchers("/posts").hasRole("ADMIN");
-//                .anyRequest().authenticated();
+        .authorizeRequests().antMatchers("/", "/auth/**", "/counters/**").permitAll()
+                .antMatchers("/posts").hasRole("ADMIN")
+                .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     public void configure(WebSecurity web)
             throws Exception {
-//        web.ignoring().antMatchers(HttpMethod.GET, "/posts");
-        web.ignoring().antMatchers("/**");
+        web.ignoring().antMatchers(HttpMethod.GET, "/posts");
     }
 
     @Bean
