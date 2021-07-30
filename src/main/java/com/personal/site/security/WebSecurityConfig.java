@@ -68,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .authorizeRequests().antMatchers("/**").permitAll()
 //                .anyRequest().authenticated();
         .authorizeRequests().antMatchers("/", "/auth/**", "/counters/**").permitAll()
-                .antMatchers("/posts").hasRole("ADMIN")
+                .antMatchers("/posts/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -77,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web)
             throws Exception {
         web.ignoring().antMatchers(HttpMethod.GET, "/posts");
+        web.ignoring().antMatchers(HttpMethod.GET, "/normalPosts");
     }
 
     @Bean

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @RequiredArgsConstructor
 @Document
-public class Post {
+public class NormalPost {
     @Id
     private final String id;
     private final String title;
@@ -16,6 +16,4 @@ public class Post {
     private final String username;
     private final String date;
     private final Long readCount;
-    // either one of "notice" or "free"
-//    private final String boardType;
 }
