@@ -9,9 +9,9 @@ import java.util.Optional;
 @CrossOrigin(origins="*")
 public interface MemberRepository extends MongoRepository<Member, String> {
     public Member findByEmail(String email);
-    Optional<Member> findByNickname(String nickname);
+    Optional<Member> findByUsername(String username);
 
-    Boolean existsByNickname(String nickname);
+    Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
 }

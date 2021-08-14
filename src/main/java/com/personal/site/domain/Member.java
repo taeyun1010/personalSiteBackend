@@ -18,7 +18,7 @@ public class Member {
     @Indexed(unique=true)
     private final String email;
     private final String password;
-    private final String nickname;
+    private final String username;
     private final String address;
     private final String phone;
     private final String website;
@@ -27,11 +27,11 @@ public class Member {
     private Set<Role> roles = new HashSet<>();
 
     public Member(String email, String password,
-                  String nickname, String address, String phone,
+                  String username, String address, String phone,
                   String website, String gender) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.username = username;
         this.address = address;
         this.phone = phone;
         this.website = website;

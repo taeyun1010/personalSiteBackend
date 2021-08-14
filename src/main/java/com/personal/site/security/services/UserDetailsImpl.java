@@ -22,14 +22,24 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
+    private String address;
+    private String phone;
+    private String website;
+    private String gender;
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(String id, String username, String email,
-                           String password, Collection<? extends GrantedAuthority> authorities) {
+                           String password, String address, String phone,
+                           String website, String gender,
+                           Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.address = address;
+        this.phone = phone;
+        this.website = website;
+        this.gender = gender;
         this.authorities = authorities;
     }
 
@@ -39,8 +49,9 @@ public class UserDetailsImpl implements UserDetails {
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(member.getId(),
-                member.getNickname(), member.getEmail(), member.getPassword(),
-                authorities);
+                member.getUsername(), member.getEmail(), member.getPassword(),
+                member.getAddress(), member.getPhone(), member.getWebsite(),
+                member.getGender(), authorities);
     }
 
     @Override
