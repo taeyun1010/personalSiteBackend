@@ -16,6 +16,4 @@ public class Post {
     private final String username;
     private final String date;
     private final Long readCount;
-    // either one of "notice" or "free"
-//    private final String boardType;
 }

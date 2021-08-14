@@ -71,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/posts/**").hasRole("ADMIN")
 //                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/members/**").hasRole("ADMIN")
+                // TODO: only allow user who created post to patch the post
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

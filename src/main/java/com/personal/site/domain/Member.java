@@ -18,6 +18,7 @@ public class Member {
     @Indexed(unique=true)
     private final String email;
     private final String password;
+    @Indexed(unique=true)
     private final String username;
     private final String address;
     private final String phone;
