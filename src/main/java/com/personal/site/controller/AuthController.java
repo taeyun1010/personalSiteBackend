@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.personal.site.domain.Cart;
 import com.personal.site.domain.ERole;
 import com.personal.site.domain.Member;
 import com.personal.site.domain.Role;
+import com.personal.site.repository.CartRepository;
 import com.personal.site.repository.MemberRepository;
 import com.personal.site.repository.RoleRepository;
 import com.personal.site.security.jwt.*;
@@ -39,6 +41,9 @@ public class AuthController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    CartRepository cartRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -116,6 +121,9 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+
+        Cart cart = new Cart(user.getUsername());
+        cartRepository.save(cart);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
