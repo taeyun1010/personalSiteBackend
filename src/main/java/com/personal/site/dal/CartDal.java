@@ -6,5 +6,6 @@ import com.personal.site.domain.Product;
 public interface CartDal {
     Cart save(Cart cart);
     Cart findByUsername(String username);
+    void deleteByUsername(String username);
     void addToCart(String username, Product product);
 }

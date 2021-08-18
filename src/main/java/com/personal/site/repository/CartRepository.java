@@ -37,6 +37,13 @@ public class CartRepository implements CartDal {
     }
 
     @Override
+    public void deleteByUsername(String username) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("username").is(username));
+        mongoTemplate.remove(query, Cart.class);
+    }
+
+    @Override
     public void addToCart(String username, Product product) {
         Update update = new Update();
         update.addToSet("products", product);

@@ -2,9 +2,11 @@ package com.personal.site.controller;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.personal.site.domain.Cart;
@@ -23,11 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -126,5 +124,24 @@ public class AuthController {
         cartRepository.save(cart);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @DeleteMapping("/withdraw/{username}")
+    public ResponseEntity<?> withdraw(@PathVariable String username, HttpServletRequest request) {
+        AuthTokenFilter authTokenFilter = new AuthTokenFilter();
+        String jwt = authTokenFilter.parseJwt(request);
+
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            String usernameFromJwt = jwtUtils.getUserNameFromJwtToken(jwt);
+
+            if (!username.equals(usernameFromJwt)) {
+                return ResponseEntity.status(401).body("You can only withdraw your account");
+            }
+            userRepository.deleteByUsername(username);
+            cartRepository.deleteByUsername(username);
+            return ResponseEntity.status(200).body("ok");
+        } else {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
     }
 }

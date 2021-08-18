@@ -1,10 +1,13 @@
 package com.personal.site.controller;
 
 import com.personal.site.domain.Product;
+import com.personal.site.repository.ProductRepository;
 import com.personal.site.service.ProductService;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,9 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ProductRepository productRepository;
+
     //TODO: url을 이렇게 하면 /products/{id} 로 delete가 안 된다. method not supported가 뜬다.
 //    @GetMapping("/products/{skip}")
 //    public List<Product> getProducts(@PathVariable String skip) {
@@ -29,9 +35,11 @@ public class ProductController {
 //    }
 
     @GetMapping("/products/top")
-    public List<Product> getProducts() {
-        List<Product> products = productService.getTop3ProductsOrderByName();
-        return products;
+    public Iterable<Product> getProducts() {
+        PageRequest page = PageRequest.of(
+                0, 3, Sort.by("id").descending()
+        );
+        return productRepository.findAll(page).getContent();
     }
 
     @PostMapping(path = "/products/add", consumes = {MULTIPART_FORM_DATA_VALUE})

@@ -62,18 +62,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // TODO: enable spring csrf prevention;
+        //  REST API 서버로 실행되는 애플리케이션은 CSRF를 disable 해야 한다.
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 //                .authorizeRequests().antMatchers("/**").permitAll()
 //                .anyRequest().authenticated();
-        .authorizeRequests().antMatchers("/", "/auth/**", "/counters/**").permitAll()
+        .authorizeRequests()
+                .antMatchers("/", "/auth/**", "/counters/**",
+                        "/products/**", "/carts/**").permitAll()
                 .antMatchers("/posts/**").hasRole("ADMIN")
 //                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/members/**").hasRole("ADMIN")
-                .antMatchers("/products/**").permitAll()
                 // TODO: only allow user to access his own cart
-                .antMatchers("/carts/**").permitAll()
                 // TODO: only allow user who created post to patch the post
                 .anyRequest().authenticated();
 
