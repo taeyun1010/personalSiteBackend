@@ -71,12 +71,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated();
         .authorizeRequests()
                 .antMatchers("/", "/auth/**", "/counters/**",
-                        "/products/**", "/carts/**").permitAll()
+                        "/products/**", "/carts/**", "/ws/**", "/app/**").permitAll()
                 .antMatchers("/posts/**").hasRole("ADMIN")
 //                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/members/**").hasRole("ADMIN")
                 // TODO: only allow user to access his own cart
                 // TODO: only allow user who created post to patch the post
+                // TODO: only allow logged in user to join the chat
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
