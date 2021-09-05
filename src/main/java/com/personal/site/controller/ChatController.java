@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 
@@ -40,16 +41,19 @@ public class ChatController {
                         @Payload ChatMessage chatMessage,
                         SimpMessageHeaderAccessor headerAccessor) {
         String sessionId = headerAccessor.getSessionId();
-        System.out.println("sessionId = " + sessionId);
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         headerAccessor.getSessionAttributes().put("roomId", roomId);
 //        return chatMessage;
         List<ChatMessage> prevMessages = chatMessageRepository.findByRoomIdOrderByDate(roomId);
 
-//        for (ChatMessage prevMessage : prevMessages) {
-//            messagingTemplate.convertAndSendToUser(sessionId, "/topic/" + roomId, prevMessage);
-//        }
+        for (ChatMessage prevMessage : prevMessages) {
+//            messagingTemplate.convertAndSendToUser(principal.getName(), "/topic/" + roomId, prevMessage);
+//            messagingTemplate.convertAndSendToUser(chatMessage.getSender(),
+//                    "/queue/" + roomId, prevMessage);
+            String dest = "/topic/" + chatMessage.getSender() + "/queue/" + roomId;
+            messagingTemplate.convertAndSend(dest, prevMessage);
+        }
         messagingTemplate.convertAndSend("/topic/" + roomId, chatMessage);
         chatMessage.setDate(new Date());
         chatMessage.setRoomId(roomId);
